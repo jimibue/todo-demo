@@ -1,26 +1,53 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import logo from "./logo.svg";
+import "./App.css";
+import List from "./List";
+import TodoForm from "./TodoForm";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+  state = {
+    todos: [
+      { id: 1, name: "Learn React", complete: true },
+      { id: 2, name: "Learn Cooking", complete: false },
+      { id: 3, name: "Learn Signing", complete: false },
+    ],
+  };
+
+  handleClick = (id) => {
+    console.log(id);
+    const { todos } = this.state;
+
+    const newTodos = todos.map((todo) => {
+      if (todo.id === id) {
+        return {
+          ...todo,
+          complete: !todo.complete,
+        };
+      }
+      return todo;
+    });
+
+    this.setState({
+      todos: newTodos,
+    });
+  };
+
+  addItem = (item) => {
+    const { todos } = this.state;
+    const newTodo = { id: Math.random(), name: item, complete: false };
+    this.setState({
+      todos: [...todos, newTodo],
+    });
+  };
+  render() {
+    return (
+      <>
+        <List todos={this.state.todos} todoClick={this.handleClick} />
+        <hr />
+        <TodoForm add={this.addItem} />
+      </>
+    );
+  }
 }
 
 export default App;
